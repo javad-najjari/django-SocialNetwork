@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+
+    <h3 style="text-align: center; margin-top: 50px; color: gray;">
+        Replying to <a href="{% url 'accounts:profile' comment.user %}" style="text-decoration: none;">{{ comment.user }}</a>
+    </h3> <br>
+    
+    <div style="margin-bottom: 25px; margin-left: 450px; width: 420px;">
+        <img src="{{ comment.user.image.url }}" style="width: 40px; border-radius: 50%; margin-right: 10px;">
+        <p style="display: inline-block;">
+            <a href="{% url 'accounts:profile' comment.user.username %}"
+            style="text-decoration: none;" >
+                <h5 style="display: inline-block; margin-right: 15px;">{{ comment.user }}</h5>
+            </a>
+            {{ comment.body }} <br>
+            <small style="font-size: 10px; text-align: center;">{{ comment.created|timesince }}</small>
+        </p>
+    </div>
+
+
+    <form action="" method="POST" style="margin-left: 450px;">
+        {% csrf_token %}
+        {{ form.body }}
+        <input type="submit" value="send">
+    </form>
+{% endblock %}

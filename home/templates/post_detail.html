@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+
+    <div style="margin-bottom: 50px; background-color: rgb(190, 233, 233);">
+        
+        {% if post.image %}
+            <!-- post image -->
+            <img src="{{ post.image.url }}" style="max-height: 500px; display: block; margin: auto;">
+            
+            {% if request.user.is_authenticated %}
+            <!-- like post -->
+                {% if can_like %}
+                    <a href="{% url 'accounts:like_post' post.id %}" style="font-size: 35px; margin-left: 45%; margin-right: 50px; display: inline-block;">
+                        <i class="fa fa-heart" style="color: red; margin-top: 15px;"><h4 style="font-size: 20px; color: black; margin-top: 10px;"><span id="like-count-{{ post.id }}">{{ post.post_likes.count }}</span> likes</h4></i>
+                    </a>
+                {% else %}
+                    <a href="{% url 'accounts:like_post' post.id %}" style="font-size: 35px; margin-left: 45%; margin-right: 50px; display: inline-block;">
+                        <i class="fa fa-heart" style="color: white; margin-top: 15px;"><h4 style="font-size: 20px; color: black; margin-top: 10px;"><span id="like-count-{{ post.id }}">{{ post.post_likes.count }}</span> likes</h4></i>
+                    </a>
+                {% endif %}
+
+            <!-- save post -->
+                {% if can_save %}
+                    <a href="{% url 'accounts:save_post' post.id %}">
+                        <i class="fa fa-save" style="font-size:36px;"><h4 style="font-size: 20px; color: black; margin-top: 10px;"><span id="save-count-{{ post.id }}">{{ post.post_saves.count }}</span> saves</h4></i>
+                    </a>
+                {% else %}
+                    <a href="{% url 'accounts:save_post' post.id %}">
+                        <i class="fa fa-save" style="font-size:36px; color: white;"><h4 style="font-size: 20px; color: black; margin-top: 10px;"><span id="save-count-{{ post.id }}">{{ post.post_saves.count }}</span> saves</h4></i>
+                    </a>
+                {% endif %}
+            {% endif %}
+
+            <hr style="border: 1px dashed blue;">
+            <div style="width: 600px; text-align: center; margin: auto; direction: rtl;">
+                <a href="{% url 'accounts:profile' post.user.username %}">
+                    <img src="{{ post.user.image.url }}" style="width: 40px; height: 40px; border-radius: 50%;">
+                    {{ post.user.username }}
+                </a>
+                {{ post.description }}
+            </div>
+            <hr style="border: 1px dashed blue;">
+
+        {% else %}
+
+            <!-- post video -->
+            <video controls style="max-height: 500px; display: block; margin: auto;">
+                <source src="{{ post.video.url }}">
+            </video>
+            
+            {% if request.user.is_authenticated %}
+            <!-- like post -->
+                {% if can_like %}
+                    <a class="like-save-btn" id="like-count-{{post.pk}}" data-pk="{{ post.id }}" href="{% url 'accounts:like_post' post.id %}" style="font-size: 35px; margin-left: 45%; margin-right: 50px; display: inline-block;">
+                        <i class="fa fa-heart" style="color: red; margin-top: 15px;"><h4 style="font-size: 20px; color: black; margin-top: 10px;">{{ post.post_likes.count }} likes</h4></i>
+                    </a>
+                {% else %}
+                    <a class="like-save-btn" id="like-count-{{post.pk}}" data-pk="{{ post.id }}" href="{% url 'accounts:like_post' post.id %}" style="font-size: 35px; margin-left: 45%; margin-right: 50px; display: inline-block;">
+                        <i class="fa fa-heart" style="color: white; margin-top: 15px;"><h4 style="font-size: 20px; color: black; margin-top: 10px;">{{ post.post_likes.count }} likes</h4></i>
+                    </a>
+                {% endif %}
+
+            <!-- save post -->
+                {% if can_save %}
+                    <a class="like-save-btn" id="save-count-{{post.pk}}" data-pk="{{ post.id }}" href="{% url 'accounts:save_post' post.id %}">
+                        <i class="fa fa-save" style="font-size:36px;"><h4 style="font-size: 20px; color: black; margin-top: 10px;">{{ post.post_saves.count }} saves</h4></i>
+                    </a>
+                {% else %}
+                    <a class="like-save-btn" id="save-count-{{post.pk}}" data-pk="{{ post.id }}" href="{% url 'accounts:save_post' post.id %}">
+                        <i class="fa fa-save" style="font-size:36px; color: white;"><h4 style="font-size: 20px; color: black; margin-top: 10px;">{{ post.post_saves.count }} saves</h4></i>
+                    </a>
+                {% endif %}
+            {% endif %}
+
+
+            <hr style="border: 1px dashed blue;">
+            <div style="width: 600px; margin: auto; direction: rtl; text-align: center; ">
+                <a href="{% url 'accounts:profile' post.user.username %}">
+                    <img src="{{ post.user.image.url }}" style="width: 40px; height: 40px; border-radius: 50%;">
+                    {{ post.user.username }}
+                </a>
+                {{ post.description }}
+                
+            </div>
+
+            <hr style="border: 1px dashed blue;">
+
+        {% endif %}
+
+    </div>
+
+    {% if request.user.is_authenticated %}
+        <a href="{% url 'home:comment' post.id %}" style="position: fixed; bottom: 0; margin: 50px;">
+            <i class="far fa-comment" style="font-size: 50px;"></i>
+        </a>
+    {% else %}
+        <h4 style="text-align: center;">To post a comment, first <a href="{% url 'accounts:login' %}" style="text-decoration: none;">log in</a> to your account</h4> <br><br><br>
+    {% endif %}
+
+    <div style="background-color: rgb(228, 199, 199); width: 600px; margin: auto; margin-bottom: 150px; padding-bottom: 20px;">
+
+        <h2 style="text-align: center; padding-top: 20px;">Comments ({{post.post_comments.count}})</h2> <br><br>
+
+        {% for comment in post.post_comments.all %}
+
+            {% if not comment.is_reply %}
+
+                <div style="margin-bottom: 25px; margin-left: 10px;">
+                    <img src="{{ comment.user.image.url }}" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+                    <p style="display: inline-block;">
+                        <a href="{% url 'accounts:profile' comment.user.username %}"
+                        style="text-decoration: none;" >
+                            <h5 style="display: inline-block; margin-right: 15px;">{{ comment.user }}</h5>
+                        </a>
+                        {{ comment.body }} <br>
+                        <small style="font-size: 10px; text-align: center;">{{ comment.created|timesince }}</small>
+                        {% if request.user.is_authenticated %}
+                            &nbsp; &nbsp; &nbsp; &nbsp;
+                            <a href="{% url 'home:reply' comment.id %}" style="text-decoration: none; font-size: 12px; color: darkslategray;">Reply</a>
+                        {% endif %}
+                    </p>
+                </div>
+
+                {% if comment.comment_replies %}
+
+                    {% for reply in comment.comment_replies.all %}
+                    <div style="margin-left: 60px; background-color: rgb(240, 154, 237); padding-left: 5px; padding-right: 5px;">
+                        <img src="{{ reply.user.image.url }}" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;">
+                        <p style="display: inline-block;">
+                            <a href="{% url 'accounts:profile' reply.user.username %}"
+                            style="text-decoration: none;" >
+                                <h5 style="display: inline-block; margin-right: 15px;">{{ reply.user }}</h5>
+                            </a>
+                            <p style="color: rgb(206, 70, 36); display: inline-block; font-size: 14px;">@{{ reply.real_reply.user }}</p> {{ reply.body }} <br>
+                            <small style="font-size: 10px; text-align: center;">{{ comment.created|timesince }}</small>
+                            {% if request.user.is_authenticated %}
+                            &nbsp; &nbsp; &nbsp; &nbsp;
+                            <a href="{% url 'home:reply' reply.id %}" style="text-decoration: none; font-size: 12px; color: darkslategray;">Reply</a>
+                            {% endif %}
+                        </p>
+                    </div>
+                    {% endfor %}
+
+                {% endif %}
+
+            {% endif %}
+
+        {% empty %}
+            <p style="text-align: center;">There are no comments to display</p>
+        {% endfor %}
+
+    </div>
+
+{% endblock %}
+
+
+{% block js %}
+
+<script>
+    $().click(function(e){
+        e.preventDefault()
+        var id = $(this).attr("data-pk")
+        var link = "/like/" + id
+        var url = $(this).attr("href")
+        $.ajax({
+            url: url,
+            success: function(success) {
+                $.ajax({
+                    url: link,
+                    success: function(s) {
+                        $('#like-count-' + id).html()
+                    },
+                    error: function(error) {
+                        console.log("error 2")
+                    }
+                })
+            },
+            error: function(error) {
+                console.log("error")
+            },
+        })
+    })
+</script>
+
+{% endblock js %}

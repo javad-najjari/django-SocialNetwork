@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+    <br>
+    <div style="width: 500px; height: 465px; margin: auto; border: 1px solid lightgray; border-radius: 10px; padding: 10px;
+    overflow: scroll;">
+        {% for msg in msgs %}
+        <div>
+            {% if msg.sender == user %}            
+                <div style="margin-left: 10px; border: 1px solid lightgray; display: inline-block; border-radius: 50px;
+                padding: 10px 10px 0 10px; margin-bottom: 5px; max-width: 300px;">
+                    <a href="{% url 'accounts:profile' user.username %}" style="text-decoration: none;">
+                        <img src="{{ user.image.url }}" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+                    </a>
+                    <p style="display: inline-block;">
+                        {{ msg.msg_content }} <br>
+                    </p>
+                </div>
+            {% else %}
+                <div style="margin: 0px 0px 5px 200px; direction: rtl; display: inline-block; border-radius: 50px;
+                padding: 10px 10px 0 10px; background-color: rgb(230, 224, 224); max-width: 300px;">
+                    <p style="display: inline-block;">
+                        {{ msg.msg_content }} <br>
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+
+        {% empty %}
+            <p style="text-align: center;">Send the first message</p>
+        {% endfor %}
+    </div>
+
+    <div style="margin-left: 430px; margin-top: 5px;">
+        <form action="" id="myInput" method="POST" style="overflow-wrap: break-word; display: flex;">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" id="myBtn" value="Send" class="btn btn-primary" style="margin-left: 5px;">
+        </form>
+    </div>
+
+{% endblock %}
+
+
+{% block js %}
+<script>
+    var input = document.getElementById("myInput");
+    input.addEventListener("keyup", function(event) {
+      if (event.keyCode === 13) {
+       event.preventDefault();
+       document.getElementById("myBtn").click();
+      }
+    });
+</script>
+{% endblock %}

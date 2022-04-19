@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+
+    <div style="width: 700px; min-height: auto; margin: 40px auto; background-color: rgb(212, 198, 198);">
+
+        <ul>
+
+            {% if user.image %}
+
+                <div style="display: inline-block; width: 200px;">
+                    <li style="list-style: none;">
+                        <img src="{{ user.image.url }}" style="width: 130px; height: 130px; margin: 10px; border-radius: 50%; border: 1px solid blue;">
+                        {% if request.user.id == user.id %}
+                            <form action="{% url 'accounts:change-image' user.id %}" enctype= "multipart/form-data" method="POST" style="display: flex;">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label for="formFileSm" class="form-label" style="color: #990808;">Change profile image</label>
+                                    {{ form.image }}
+                                    <input type="submit" value="select" style="background-color: aqua; margin: 10px 50px;">
+                                </div>
+                            </form>
+                        {% endif %}
+                    </li>
+                </div>
+
+            {% else %}
+            <div style="display: inline-block; width: 200px;">
+                <li style="list-style: none;">
+                    <img src="" style="width: 130px; height: 130px; margin: 10px; border-radius: 50%; border: 1px solid blue;">
+                    {% if request.user.id == user.id %}
+                    <form action="{% url 'accounts:change-image' user.id %}" enctype= "multipart/form-data" method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="formFileSm" class="form-label" style="color: #990808;">Select your profile image</label>
+                            {{ form.image }}
+                            <input type="submit" value="select" style="background-color: aqua; margin: 10px 50px;">
+                        </div>
+                    </form>
+                    {% endif %}
+                </li>
+            </div>
+            {% endif %}
+
+            <div style="display: inline-block;">
+                <li style="width: 70px; list-style: none; display: inline-block; margin-left: 40px;">
+                    <h1>{{ user.user_posts.count }}</h1><small>Posts</small>
+                </li>
+
+                <li style="width: 70px; list-style: none; display: inline-block; margin-left: 35px;">
+                    <h1 style="text-align: center;">{{ user.followers.count }}</h1><a href="{% url 'accounts:followers_list' user.username %}" style="text-decoration: none; color: black;"><small>Followers</small></a>
+                </li>
+
+                <li style="width: 70px; list-style: none; display: inline-block; margin-left: 60px;">
+                    <h1 style="text-align: center;">{{ user.following.count }}</h1><a href="{% url 'accounts:following_list' user.username %}" style="text-decoration: none; color: black;"><small>Following</small></a>
+                </li> <br>
+
+                {% if request.user.is_authenticated and user != request.user %}
+                    {% if not is_following %}
+                        <a href="{% url 'accounts:follow' user.username %}" style="position: absolute; margin-left: 105px; margin-top: 15px;">
+                            <h3 class="btn btn-primary" style="padding-left: 50px; padding-right: 50px;">Follow</h3>
+                        </a>
+                    {% else %}
+                        <a href="{% url 'accounts:follow' user.username %}" style="position: absolute; margin-left: 105px; margin-top: 15px;">
+                            <h3 class="btn btn-danger" style="padding-left: 50px; padding-right: 50px;">UnFollow</h3>
+                        </a>
+                    {% endif %}
+                {% endif %}
+                
+                {% if request.user.id == user.id %}
+                    <div style="margin: 50px; border: 1px solid gray; border-radius: 5px; width: 250px; padding: 5px; margin-left: 70px;">
+                        <a href="{% url 'accounts:edit_profile' request.user.pk %}" style="text-decoration: none; font-size: 20px; color: black; margin-left: 70px;">Edit Profile</a>
+                    </div>
+                {% endif %}
+                
+            </div>
+
+            <div>
+                <h4>{{ user.name }}</h4>
+                
+                <small>{{ user.bio }}</small>
+                <br><br><hr>
+                <h2 style="margin-left: 275px;">Posts</h2><hr><br>
+
+                {% if request.user == user %}
+                <a class="btn btn-info" href="{% url 'accounts:liked_posts' %}" style="font-size: 35px; margin-left: 25%; margin-right: 50px; display: inline-block;">
+                    <i class="fa fa-heart" style="color: red; text-align: center;">
+                        <h4 style="font-size: 20px; color: black;">liked posts</h4>
+                    </i>
+                </a>
+
+                <a class="btn btn-info" href="{% url 'accounts:saved_posts' %}" >
+                    <i class="fa fa-save" style="font-size:36px; text-align: center;">
+                        <h4 style="font-size: 20px; color: black;">saved posts</h4>
+                    </i>
+                </a>
+                {% endif %}
+
+            </div>
+
+        </ul>
+
+        <style>
+            * {
+              box-sizing: border-box;
+            }
+            
+            body {
+              font-family: Arial, Helvetica, sans-serif;
+            }
+            
+            /* Float four columns side by side */
+            .column {
+              float: left;
+              width: 50%;
+              padding: 0 10px;
+            }
+
+            /* Responsive columns */
+            @media screen and (max-width: 600px) {
+              .column {
+                width: 100%;
+                display: block;
+                margin-bottom: 20px;
+              }
+            }
+            
+            /* Style the counter cards */
+            .card {
+              box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+              padding: 16px;
+              text-align: center;
+              background-color: #f1f1f1;
+            }
+        </style>
+
+        <div style="text-align: center;">
+            {% for post in user.user_posts.all %}
+                <div style="margin-top: 15px;">
+                    <div class="column" style="margin-top: 5px;">
+                        <div class="card" style="height: 270px;">
+                            {% if post.image %}
+                                <img style="width: 100%; height: 100%;" src="{{ post.image.url }}" alt="">
+                                <a class="btn btn-info" style="width: 100%;" href="{% url 'home:detail' post.id %}">SHOW</a>
+                            {% else %}
+                                <video controls autoplay height="100%" width="100%">
+                                    <source src="{{ post.video.url }}">
+                                </video>
+                                <a class="btn btn-info" style="width: 100%;" href="{% url 'home:detail' post.id %}">SHOW</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <br><br>
+                <p>There are no posts to display </p> <br><br>
+            {% endfor %}
+        </div>
+
+    </div>
+
+{% endblock %}

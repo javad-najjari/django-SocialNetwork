@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+    <br>
+    <h3 style="margin-left: 400px;">Messages</h3>
+    <br><br>
+
+    {% for user in users %}
+        <div style="width: 500px; margin-left: 400px; background-color: rgb(180, 245, 180);
+            border-radius: 10px; padding: 8px 0 0px 8px; ">
+            <a href="{% url 'accounts:message' request.user.username user.username %}" style="text-decoration: none; color: black;">
+            <div style="margin-bottom: 20px;">
+                <img src="{{ user.image.url }}" style="width: 50px; height: 50px; border-radius: 50%;">
+                &nbsp; &nbsp;
+                <p style="display: inline-block;">{{ user }}</p>
+            </div>
+        </div>
+            </a>
+    {% empty %}
+        <p style="margin-left: 400px;">There are no messages to display</p>
+    {% endfor %}
+
+{% endblock %}

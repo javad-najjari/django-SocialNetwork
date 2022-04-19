@@ -1,0 +1,20 @@
+.main-instagram.owl-carousel .owl-nav button.owl-next{
+    background: #010101;
+    position: absolute;
+    z-index: 1;
+    display: block;
+    height: 100%;
+    width: 50px;
+    line-height: 0px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #ffffff;
+    top: 0;
+    padding: 0;
+    margin-top: 0;
+    opacity: 1;
+    right: 0px;
+    -webkit-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}

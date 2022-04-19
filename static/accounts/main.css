@@ -1,0 +1,55 @@
+
+
+
+.container {
+    width: 500px !important;
+    margin-top: 40px;
+    border-radius: 10px;
+    padding: 10px;
+    border: 1px solid gray;
+}
+
+li {
+    list-style-type: none;
+}
+
+.img-style {
+    width: 50px;
+    border-radius: 50% !important;
+    margin-right: 10px;
+    height: 50px;
+}
+
+.p-user {
+    display: inline-block;
+    font-size: 20px;
+}
+
+a {
+    text-decoration: none !important;
+    color: black !important;
+}
+
+.a-F-UN {
+    display: inline-block;
+}
+
+.p-user-bio {
+    font-size: 10px;
+}
+
+.div-follow {
+    display: inline-block;
+    margin-left: 50px;
+    margin-bottom: 10px;
+}
+
+.p-follow {
+    padding: 3px 40px !important;    
+}
+
+.title-F-UN {
+    color: blue;
+    text-align: center;
+}
+

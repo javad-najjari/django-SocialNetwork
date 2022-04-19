@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+
+<div style="width: 700px; margin-top: 20px; border: 1px solid lightgray; margin-left: 270px;
+    padding-left: 20px; height: 130px; overflow: scroll; white-space: nowrap; background-color: rgb(238, 225, 202);">
+    {% if request.user.is_authenticated %}
+        {% for user in following %}
+            <a href="{% url 'accounts:profile' user.to_user.username %}" style="text-decoration: none; color: black;">
+                <div style="display: inline-block;">
+                    <img src="{{ user.to_user.image.url }}"
+                    style="width: 60px; height: 60px; border-radius: 50%; margin: 20px 20px 0 0;">
+                    <p style="font-size: 13px; text-align: left;">{{ user.to_user.short_username }}</p>
+                </div>
+            </a>
+        {% empty %}
+            <p style="margin-top: 50px; margin-left: 210px;">There are no following to display</p>
+        {% endfor %}
+    {% endif %}
+</div>
+
+
+<style>
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    
+    /* Float four columns side by side */
+    .column {
+      float: left;
+      width: 50%;
+      padding: 0 10px;
+    }
+
+    /* Responsive columns */
+    @media screen and (max-width: 600px) {
+      .column {
+        width: 100%;
+        display: block;
+        margin-bottom: 20px;
+      }
+    }
+    
+    /* Style the counter cards */
+    .card {
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+      padding: 16px;
+      text-align: center;
+      background-color: #f1f1f1;
+    }
+</style>
+
+{% if request.user.is_authenticated %}
+<div style="text-align: center; width: 700px; margin-left: 270px;">
+    {% for user in following %}
+        {% for post in user.to_user.user_posts.all %}
+            <div style="margin-top: 15px;">
+            <div class="column" style="margin-top: 5px;">
+                <div class="card" style="height: 310px;">
+                    <a href="{% url 'accounts:profile' user.to_user.username %}" style="width: 100%; height: 40px; background-color: white; margin-bottom: 5px; border: 1px solid black; border-radius: 10px; text-decoration: none;">
+                        {{ user.to_user.username }} <img style="width: 35px; height: 35px; border-radius: 50%;" src="{{ user.to_user.image.url }}">
+                    </a>
+                    {% if post.image %}
+                        <img style="width: 100%; height: 100%;" src="{{ post.image.url }}" alt="">
+                        <a class="btn btn-info" style="width: 100%;" href="{% url 'home:detail' post.id %}">
+                            SHOW
+                        </a>
+                    {% else %}
+                        <video controls autoplay height="100%" width="100%">
+                            <source src="{{ post.video.url }}">
+                        </video>
+                        <a class="btn btn-info" style="width: 100%;" href="{% url 'home:detail' post.id %}">
+                            SHOW
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            </div>
+        {% endfor %}
+    {% empty %}
+        <br><br>
+        <p>There is no posts to display. first follow some body </p> <br><br>
+    {% endfor %}
+</div>
+{% else %}
+    <p style="margin-left: 480px; margin-top: 100px;">
+        First login to your account
+    </p>
+{% endif %}
+
+</div>
+
+
+{% endblock %}

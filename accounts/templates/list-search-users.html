@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block more %}
+    <link rel="stylesheet" href="{% static 'accounts/main.css' %}">
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="container">
+    <ul>
+        <h3 class="title-F-UN">Search for "{{ word }}"</h3> <br>
+        {% for user in users %}
+            <li>
+                <div class="col-md-12 a-F-UN">
+                    <a href="{% url 'accounts:profile' user.username %}">
+                    <img class="img-style" src="{{ user.image.url }}">
+                    <p class="p-user">
+                        <p class="p-user">{{ user.username }}</p>
+                        <p class="p-user-bio">{{ user.bio|truncatewords:12 }}</p>
+                    </p>
+                    </a>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}

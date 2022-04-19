@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+
+    <h3 style="text-align: center; margin-top: 50px; color: gray;">
+        Your Comment
+    </h3> <br>
+
+    <form action="" method="POST" style="margin-left: 470px;">
+        {% csrf_token %}
+        {{ form.body }}
+        <input type="submit" value="send">
+    </form>
+{% endblock %}
