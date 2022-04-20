@@ -2,9 +2,10 @@ from django.urls import path
 from django.contrib.auth.views import LogoutView
 from .views import (
     LikePost, ProfileView, ProfileView, Login, UserRegisterView, change_image, EditProfile,
-    SavePost, LikedPosts, SavedPosts, link, FollowView, ListOfFollowers, ListOfFollowing,
+    SavePost, LikedPosts, SavedPosts, FollowView, ListOfFollowers, ListOfFollowing,
     ListSearchUsers, ListMessages, MessageView,
-    UserResetPasswordView, UserPasswordResetDoneView, UserPasswordResetConfirmView, UserPasswordResetCompleteView
+    UserResetPasswordView, UserPasswordResetDoneView, UserPasswordResetConfirmView,
+    UserPasswordResetCompleteView
 )
 
 
@@ -23,7 +24,6 @@ urlpatterns = [
 
     path('like/<int:post_id>', LikePost.as_view(), name='like_post'),
     path('save/<int:post_id>', SavePost.as_view(), name='save_post'),
-    path('api/<int:post_id>', link, name='api_link'),
     
     path('liked-posts/', LikedPosts.as_view(), name='liked_posts'),
     path('saved-posts/', SavedPosts.as_view(), name='saved_posts'),

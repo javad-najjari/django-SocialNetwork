@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, redirect
-from .models import User, Post
+from .models import User
 from django.contrib import messages
 
 

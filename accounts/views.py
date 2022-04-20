@@ -1,8 +1,7 @@
-from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 from django.views.generic import UpdateView
-from django.contrib.auth import authenticate, login, logout, views as auth_views
+from django.contrib.auth import authenticate, login, views as auth_views
 from django.urls import reverse_lazy
 from .forms import UserRegistrationForm, ChangeImageForm, MessageForm, UserLoginForm
 from accounts.models import User
@@ -141,15 +140,6 @@ class SavedPosts(View):
         posts = user.user_saves.all()
         title = 'Posts you saved'
         return render(request, 'saved-liked-posts.html', {'posts': posts, 'title': title})
-
-
-def link(request, post_id):
-    user = request.user
-    post = get_object_or_404(Post, id=post_id)
-    return JsonResponse({
-        'likes': post.post_likes.count(),
-        'saves': post.post_saves.count(),
-    })
 
 
 class FollowView(LoginFirstMixin, View):
