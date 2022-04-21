@@ -16,7 +16,7 @@ class UserRegistrationForm(forms.Form):
     name = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'name*'}))
     bio = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'bio'}))
     website = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'website'}))
-    private = forms.BooleanField()
+    private = forms.BooleanField(required=False)
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'password*'}))
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'confirm password*'}))
     
