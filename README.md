@@ -6,7 +6,7 @@
 2- Create your virtual environment inside the project and activate it \
 linux --> source {Virtual environment name }/bin/activate example: source .venv/bin/activate \
 windows --> {Virtual environment name }\Scripts\activate example: ..venv\Scripts\activate \
-3- install the requirements by this command: pip install -r requirements.txt
+3- install the requirements by this command: pip install -r requirements.txt \
 4- Execute the opposite command: python manage.py runserver \
 5- Go to the opposite address: 127.0.0.1:8000 or localhost:8000 \
 \
